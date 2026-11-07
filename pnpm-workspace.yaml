@@ -9,3 +9,8 @@ supportedArchitectures:
   libc:
     - current
     - glibc
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+  electron-winstaller: true

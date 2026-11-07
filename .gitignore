@@ -2,6 +2,9 @@ node_modules/
 .next/
 out/
 dist/
+artifacts/
+android/
+ios/
 build/
 .cache/
 .env*
