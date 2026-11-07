@@ -1,15 +1,19 @@
 {
   "name": "figma-make-app",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Kaijage Hardware and Cosmetics point-of-sale system",
   "author": "Aelyn Technologies",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wasley06/kaijage.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "node scripts/run.mjs next dev",
     "build": "node scripts/build.mjs",
     "app:dev": "vite --config vite.config.ts",
-    "app:build": "vite build --config vite.config.ts",
+    "app:build": "node scripts/build-icons.mjs && vite build --config vite.config.ts",
     "app:preview": "vite preview --config vite.config.ts",
     "desktop:package": "electron-builder --publish never",
     "mobile:sync": "cap sync",
@@ -30,6 +34,7 @@
     "@payloadcms/richtext-lexical": "4.0.0-beta.6",
     "@payloadcms/translations": "4.0.0-beta.6",
     "@payloadcms/ui": "4.0.0-beta.6",
+    "electron-updater": "6.8.11",
     "graphql": "^16.8.1",
     "html-react-parser": "^5.2.10",
     "monaco-editor": "0.55.1",
@@ -72,10 +77,48 @@
     "appId": "com.aelyn.kaijagepos",
     "productName": "Kaijage POS",
     "asar": true,
-    "directories": { "output": "artifacts" },
-    "files": ["electron/**/*", "dist/app/**/*", "package.json", "!node_modules/**"],
-    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }] },
-    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true },
-    "mac": { "target": ["dmg", "zip"], "category": "public.app-category.business" }
+    "directories": {
+      "output": "artifacts"
+    },
+    "artifactName": "KaijagePOS-${version}-${arch}.${ext}",
+    "files": [
+      "electron/**/*",
+      "assets/generated/**/*",
+      "dist/app/**/*",
+      "package.json",
+      "!node_modules/**"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Wasley06",
+        "repo": "kaijage",
+        "releaseType": "release"
+      }
+    ],
+    "electronUpdaterCompatibility": ">=6.8.11",
+    "win": {
+      "icon": "assets/generated/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {
+      "icon": "assets/generated/icon.icns",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.business"
+    }
   }
 }

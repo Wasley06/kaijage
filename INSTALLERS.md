@@ -4,19 +4,35 @@ Tagged releases publish Windows, macOS, Android, and web app packages to the
 GitHub Releases page. The `main` branch also publishes an installable web app
 through GitHub Pages for iPhone and iPad users.
 
+## App icon and desktop updates
+
+`assets/icon-3d.svg` is the source identity used for Windows, macOS, Android,
+iOS, and web app icons. New Windows and macOS releases publish Electron update
+metadata and block maps alongside their installers. Windows desktop apps check
+GitHub Releases while online, download updates automatically, and offer to
+restart to install. Existing 1.0.1 desktop installs need one manual upgrade to
+the first auto-updating release. macOS updates require signing credentials
+below. The web app updates through its service worker when users reopen it.
+
 ## Windows and macOS
 
 Download the Windows `.exe` installer or macOS `.dmg` from Releases. These
 packages are currently unsigned; Windows SmartScreen or macOS Gatekeeper may
-show an operating-system warning. Production distribution should add an
-organization code-signing certificate and Apple notarization credentials.
+show an operating-system warning. macOS automatic installation also requires a
+Developer ID Application certificate from the same Apple Developer Team used
+for every later update. Configure `MACOS_CERTIFICATE_P12_BASE64`,
+`MACOS_CERTIFICATE_PASSWORD`, `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`, and
+`APPLE_TEAM_ID` as repository Actions secrets to sign and notarize macOS
+releases. Without those credentials, the macOS package is still published, but
+macOS will not apply background updates to it.
 
 ## Android
 
 The release workflow builds a sideloadable debug APK. Android may ask users to
 allow installation from their browser or file manager. A persistent Android
-release keystore should be configured before publishing updates to existing
-installations.
+release keystore and an in-app installer flow are required for automatic APK
+updates; until those are configured, install the latest APK manually. Android
+users can install the Pages PWA instead for automatic web app updates.
 
 ## iPhone and iPad
 

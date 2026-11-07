@@ -5,9 +5,10 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f5f7f8",
-  "theme_color": "#176b5b",
+  "background_color": "#f1fbfa",
+  "theme_color": "#04574b",
   "icons": [
-    { "src": "./kaijage-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "./kaijage-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./kaijage-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }

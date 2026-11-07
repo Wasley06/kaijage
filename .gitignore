@@ -3,6 +3,8 @@ node_modules/
 out/
 dist/
 artifacts/
+assets/generated/
+assets/platform/
 android/
 ios/
 build/

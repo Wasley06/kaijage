@@ -36,10 +36,14 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm app:build
       - run: pnpm exec electron-builder --win nsis --x64 --publish never
+      - run: if (!(Test-Path artifacts/latest.yml)) { throw 'Windows updater metadata was not generated.' }
       - uses: actions/upload-artifact@v4
         with:
           name: windows-installer
-          path: artifacts/*.exe
+          path: |
+            artifacts/*.exe
+            artifacts/*.blockmap
+            artifacts/latest.yml
           if-no-files-found: error
 
   macos:
@@ -58,12 +62,21 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm app:build
       - run: pnpm exec electron-builder --mac dmg zip --x64 --arm64 --publish never
+        env:
+          CSC_LINK: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+          CSC_KEY_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      - run: test -s artifacts/latest-mac.yml
       - uses: actions/upload-artifact@v4
         with:
           name: macos-installer
           path: |
             artifacts/*.dmg
             artifacts/*.zip
+            artifacts/*.blockmap
+            artifacts/latest-mac.yml
           if-no-files-found: error
 
   android:
@@ -85,10 +98,11 @@ jobs:
           java-version: '21'
       - uses: android-actions/setup-android@v3
         with:
-          packages: platform-tools platforms;android-35 build-tools;35.0.0
+          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
       - run: pnpm install --frozen-lockfile
       - run: pnpm app:build
       - run: pnpm exec cap add android
+      - run: cp -R assets/platform/android/res/. android/app/src/main/res/
       - run: cd android && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
@@ -113,6 +127,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm app:build
       - run: pnpm exec cap add ios
+      - run: cp -R assets/platform/ios/AppIcon.appiconset ios/App/App/Assets.xcassets/AppIcon.appiconset
       - name: Check Apple signing secrets
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}

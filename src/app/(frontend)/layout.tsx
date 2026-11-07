@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     makeSiteSettings.robots?.index === false
       ? { follow: false, index: false }
       : undefined,
-  icons: favicon ? { icon: favicon } : undefined,
+  icons: favicon ? { icon: favicon, apple: "/kaijage-icon-180.png" } : undefined,
   manifest: "/manifest.webmanifest",
   openGraph: {
     title,
