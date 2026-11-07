@@ -12,7 +12,7 @@ const resources = ["products", "sales", "purchases", "customers", "suppliers", "
 app.use("*", logger(console.log));
 app.use("/*", cors({
   origin: "*",
-  allowHeaders: ["Content-Type", "Authorization"],
+  allowHeaders: ["Content-Type", "Authorization", "apikey", "x-client-info"],
   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   exposeHeaders: ["Content-Length"],
   maxAge: 600,
@@ -35,7 +35,14 @@ function allowedEntity(profile: any, entity: string) {
   return profile?.role === "super_admin" || profile?.role === "admin" || profile?.entities?.includes(entity);
 }
 
-app.get(`${prefix}/health`, (c) => c.json({ status: "ok" }));
+app.get(`${prefix}/health`, async (c) => {
+  try {
+    await kv.get("system:initialized");
+    return c.json({ status: "ok", database: "ok" });
+  } catch {
+    return c.json({ status: "error", database: "unavailable" }, 503);
+  }
+});
 
 app.get(`${prefix}/setup-status`, async (c) => c.json({ initialized: Boolean(await kv.get("system:initialized")) }));
 

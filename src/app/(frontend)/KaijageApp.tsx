@@ -28,7 +28,7 @@ const sw:Record<string,string>={
 }
 
 async function request(path:string, options:RequestInit={}, token?:string){
-  const response=await fetch(`${apiBase}${path}`,{...options,headers:{'Content-Type':'application/json',Authorization:`Bearer ${token||publicAnonKey}`,...options.headers}})
+  const response=await fetch(`${apiBase}${path}`,{...options,headers:{'Content-Type':'application/json',apikey:publicAnonKey,Authorization:`Bearer ${token||publicAnonKey}`,...options.headers}})
   const data=await response.json().catch(()=>({error:'Unexpected server response.'}))
   if(!response.ok)throw new Error(data.error||'Request failed.')
   return data
