@@ -5,7 +5,7 @@ import { createClient } from "jsr:@supabase/supabase-js@2.49.8";
 import * as kv from "./kv_store.tsx";
 
 const app = new Hono();
-const prefix = "/make-server-4efeeff6";
+const prefix = "/server";
 const entities = ["entity_id_001", "entity_id_002"] as const;
 const resources = ["products", "sales", "purchases", "customers", "suppliers", "expenses", "notifications"] as const;
 
@@ -200,5 +200,7 @@ app.put(`${prefix}/users/:id`, async (c) => {
   await kv.set(`profile:${existing.id}`, profile);
   return c.json({ user: safeUser(profile) });
 });
+
+app.notFound((c) => c.json({ error: "Route not found." }, 404));
 
 Deno.serve(app.fetch);

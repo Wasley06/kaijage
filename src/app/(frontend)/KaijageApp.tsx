@@ -10,7 +10,7 @@ type RecordBase = { id:string; entityId:Entity; [key:string]:any }
 type State = { products:RecordBase[]; sales:RecordBase[]; purchases:RecordBase[]; customers:RecordBase[]; suppliers:RecordBase[]; expenses:RecordBase[]; notifications:RecordBase[]; edit_requests:RecordBase[]; users:User[] }
 
 const emptyState:State={products:[],sales:[],purchases:[],customers:[],suppliers:[],expenses:[],notifications:[],edit_requests:[],users:[]}
-const apiBase=`https://${projectId}.supabase.co/functions/v1/server/make-server-4efeeff6`
+const apiBase=`https://${projectId}.supabase.co/functions/v1/server`
 const money=(n:number)=>`TZS ${Number(n||0).toLocaleString()}`
 const uid=(prefix:string)=>`${prefix}-${Date.now().toString(36).toUpperCase()}`
 const entityName=(id:Entity)=>id==='entity_id_001'?'Kaijage Hardware':'Kaijage Cosmetics'
