@@ -1,0 +1,12 @@
+{
+  "name": "KAIJAGE POS",
+  "short_name": "Kaijage POS",
+  "description": "Business Management & Point of Sale",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f7f8",
+  "theme_color": "#176b5b",
+  "icons": [
+    { "src": "/kaijage-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
