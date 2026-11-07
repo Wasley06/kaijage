@@ -10,8 +10,9 @@ through GitHub Pages for iPhone and iPad users.
 iOS, and web app icons. New Windows and macOS releases publish Electron update
 metadata and block maps alongside their installers. Windows desktop apps check
 GitHub Releases while online, download updates automatically, and offer to
-restart to install. Existing 1.0.1 desktop installs need one manual upgrade to
-the first auto-updating release. macOS updates require signing credentials
+restart to install. Existing 1.0.1 and 1.0.2 Windows installs need a manual
+upgrade to this release because those packages did not include the updater.
+macOS updates require signing credentials
 below. The web app updates through its service worker when users reopen it.
 
 ## Windows and macOS

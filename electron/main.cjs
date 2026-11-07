@@ -1,17 +1,24 @@
 const { app, BrowserWindow, dialog, net } = require('electron')
-const { autoUpdater } = require('electron-updater')
 const path = require('node:path')
+
+let autoUpdater
+try {
+  ;({ autoUpdater } = require('electron-updater'))
+} catch (error) {
+  console.warn('Automatic updater unavailable:', error.message)
+}
 
 let mainWindow
 
 function createWindow() {
+  const appRoot = app.getAppPath()
   mainWindow = new BrowserWindow({
     width: 1440,
     height: 920,
     minWidth: 900,
     minHeight: 650,
     title: 'KAIJAGE POS',
-    icon: path.join(__dirname, '../assets/generated/icon-512.png'),
+    icon: path.join(appRoot, 'assets/generated/icon-512.png'),
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
@@ -19,14 +26,14 @@ function createWindow() {
     },
   })
 
-  mainWindow.loadFile(path.join(__dirname, '../dist/app/index.html'))
+  mainWindow.loadFile(path.join(appRoot, 'dist/app/index.html'))
   mainWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
   mainWindow.on('closed', () => { mainWindow = undefined })
 }
 
 app.whenReady().then(() => {
   createWindow()
-  if (app.isPackaged && process.platform !== 'linux') {
+  if (app.isPackaged && process.platform !== 'linux' && autoUpdater) {
     autoUpdater.autoDownload = true
     autoUpdater.autoInstallOnAppQuit = true
     autoUpdater.on('error', error => console.warn('Update check failed:', error.message))

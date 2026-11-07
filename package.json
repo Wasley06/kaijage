@@ -1,7 +1,7 @@
 {
   "name": "figma-make-app",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Kaijage Hardware and Cosmetics point-of-sale system",
   "author": "Aelyn Technologies",
   "repository": {
@@ -13,9 +13,9 @@
     "dev": "node scripts/run.mjs next dev",
     "build": "node scripts/build.mjs",
     "app:dev": "vite --config vite.config.ts",
-    "app:build": "node scripts/build-icons.mjs && vite build --config vite.config.ts",
+    "app:build": "node scripts/build-icons.mjs && vite build --config vite.config.ts && node scripts/build-electron-main.mjs",
     "app:preview": "vite preview --config vite.config.ts",
-    "desktop:package": "electron-builder --publish never",
+    "desktop:package": "npm run app:build && electron-builder --publish never",
     "mobile:sync": "cap sync",
     "start": "node scripts/run.mjs next start",
     "format": "oxfmt",
@@ -54,6 +54,7 @@
     "@vitejs/plugin-react": "^6.2.1",
     "electron": "^45.2.3",
     "electron-builder": "^26.18.0",
+    "esbuild": "0.28.2",
     "oxfmt": "^0.73.0",
     "postcss": "^8.5.0",
     "tailwindcss": "^4.0.0",
@@ -72,7 +73,7 @@
       "electron-winstaller"
     ]
   },
-  "main": "electron/main.cjs",
+  "main": "assets/generated/electron-main.cjs",
   "build": {
     "appId": "com.aelyn.kaijagepos",
     "productName": "Kaijage POS",
@@ -86,7 +87,8 @@
       "assets/generated/**/*",
       "dist/app/**/*",
       "package.json",
-      "!node_modules/**"
+      "!node_modules/**",
+      "!electron/runtime/**"
     ],
     "publish": [
       {
